@@ -5,12 +5,12 @@ from caesar import rotate_string
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-form_value = """
+form = """
 <!DOCTYPE html>    
 <html>
     <head>
         <style>
-            form {
+            form {{
                 background-color: #eee;
                 padding: 20px;
                 margin: 0 auto;
@@ -18,13 +18,13 @@ form_value = """
                 font: 16px sans-serif;
                 border-radius: 10px;   
 
-            }
-            textarea {
+            }}
+            textarea {{
                 margin: 10px 0;
                 width: 540px;
                 height: 120px;
                 
-            }
+            }}
         </style>
     </head>
     <body>
@@ -32,7 +32,7 @@ form_value = """
             <p>What is going on?!</p>
             <label for="Rotate-by">Rotate By:</label>
             <input id ="Rotate-by" name="rot" type="text" value="0"/> <br>
-            <textarea name="text" rows="10" cols="50"></textarea><br>
+            <textarea name="text" rows="10" cols="50">{0}</textarea><br>
             <input type="submit" />
         </form>
     </body>
@@ -40,10 +40,13 @@ form_value = """
 """
 @app.route('/')
 def index():
-    return form_value
+    return form.format()
 
 @app.route('/', methods=['POST'])
 def encrypt():
-    return '<h1>rot</h1>'
+    rot=int(request.form['rot'])
+    text=request.form['text']
+    rotated=rotate_string(text, rot)
+    return form.format(rotated)
 
 app.run()
